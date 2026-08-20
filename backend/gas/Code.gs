@@ -155,6 +155,16 @@ function getFormsRegistry(ss) {
   var headers = data[0].map(function(h) { return String(h).trim(); });
   var forms = [];
 
+  function parseBooleanOrYes(val) {
+    if (val === true) return true;
+    if (typeof val === "string") {
+      var clean = val.trim().toLowerCase();
+      return clean === "yes" || clean === "true" || clean === "1";
+    }
+    if (typeof val === "number") return val === 1;
+    return false;
+  }
+
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
     if (!row[0] && !row[1]) continue;
@@ -165,12 +175,17 @@ function getFormsRegistry(ss) {
       item[headerKey] = row[j];
     }
 
+    var isPriority = parseBooleanOrYes(item.priority !== undefined ? item.priority : row[3]);
+    var isNewForm = parseBooleanOrYes(item.newform !== undefined ? item.newform : row[4]);
+
     forms.push({
       formId: String(item.formid || row[0] || "").trim(),
       formTitle: String(item.formtitle || row[1] || "").trim(),
       status: String(item.status || row[2] || "Active").trim(),
-      priority: Number(item.priority || row[3] || 0),
-      newForm: String(item.newform || row[4] || "").toLowerCase() === "true" || item.newform === true,
+      priority: isPriority ? "Yes" : "No",
+      isPriority: isPriority,
+      newForm: isNewForm ? "Yes" : "No",
+      isNew: isNewForm,
       formFolder: String(item.formfolder || row[5] || "").trim(),
       responseSheet: String(item.responsesheet || row[6] || "").trim(),
       responseFolder: String(item.responsefolder || row[7] || "").trim()

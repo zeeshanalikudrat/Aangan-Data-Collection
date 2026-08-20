@@ -12,9 +12,19 @@ import { fetchFormsRegistryFromGAS } from "@/lib/gas-service";
 
 const FORMS_DIR = path.join(process.cwd(), "backend", "forms");
 
+function checkIsTrueOrYes(val: unknown): boolean {
+  if (val === true) return true;
+  if (typeof val === "string") {
+    const clean = val.trim().toLowerCase();
+    return clean === "yes" || clean === "true" || clean === "1";
+  }
+  if (typeof val === "number") return val === 1;
+  return false;
+}
+
 function getPriorityScore(val: number | boolean | string | undefined): number {
   if (typeof val === "number") return val;
-  if (val === true || String(val).trim().toLowerCase() === "yes") return 1;
+  if (checkIsTrueOrYes(val)) return 1;
   if (typeof val === "string") {
     const parsed = parseInt(val, 10);
     if (!isNaN(parsed)) return parsed;
@@ -84,12 +94,20 @@ export async function getAllFormsLive(includeDisabled = false): Promise<FormConf
         if (liveRow) {
           if (liveRow.formTitle) form.title = liveRow.formTitle;
           if (liveRow.status) form.status = liveRow.status;
-          if (liveRow.priority !== undefined && liveRow.priority !== null) {
-            form.priority = liveRow.priority;
-            form.isPriority = liveRow.priority;
+
+          const pVal = (liveRow as Record<string, unknown>).isPriority !== undefined
+            ? (liveRow as Record<string, unknown>).isPriority
+            : liveRow.priority;
+          if (pVal !== undefined && pVal !== null && pVal !== "") {
+            form.priority = pVal as boolean | string | number;
+            form.isPriority = pVal as boolean | string | number;
           }
-          if (liveRow.newForm !== undefined && liveRow.newForm !== null) {
-            form.newForm = liveRow.newForm;
+
+          const nVal = (liveRow as Record<string, unknown>).isNew !== undefined
+            ? (liveRow as Record<string, unknown>).isNew
+            : liveRow.newForm;
+          if (nVal !== undefined && nVal !== null && nVal !== "") {
+            form.newForm = nVal as boolean | string;
           }
         }
       }
@@ -154,7 +172,7 @@ export function updateFormConfig(
     const updated: FormConfig = {
       ...existing,
       ...updates,
-      id: formId, // ID is immutable
+      id: formId,
       updatedAt: new Date().toISOString(),
     };
 

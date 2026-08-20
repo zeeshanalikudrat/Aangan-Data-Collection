@@ -5,18 +5,19 @@ interface FormCardProps {
   isClosed?: boolean;
 }
 
-export function FormCard({ form, isClosed = false }: FormCardProps) {
-  const isNew =
-    form.newForm === true ||
-    String(form.newForm || "").trim().toLowerCase() === "yes" ||
-    String(form.newForm || "").trim().toLowerCase() === "true";
+function checkIsTrueOrYes(val: unknown): boolean {
+  if (val === true) return true;
+  if (typeof val === "string") {
+    const clean = val.trim().toLowerCase();
+    return clean === "yes" || clean === "true" || clean === "1";
+  }
+  if (typeof val === "number") return val === 1;
+  return false;
+}
 
-  const priorityVal = String(form.priority ?? form.isPriority ?? "").trim().toLowerCase();
-  const isPriority =
-    form.priority === true ||
-    form.isPriority === true ||
-    priorityVal === "yes" ||
-    priorityVal === "true";
+export function FormCard({ form, isClosed = false }: FormCardProps) {
+  const isNew = checkIsTrueOrYes(form.newForm);
+  const isPriority = checkIsTrueOrYes(form.priority) || checkIsTrueOrYes(form.isPriority);
 
   if (isClosed) {
     return (
