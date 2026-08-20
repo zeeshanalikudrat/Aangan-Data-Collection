@@ -95,17 +95,14 @@ export async function getAllFormsLive(includeDisabled = false): Promise<FormConf
           if (liveRow.formTitle) form.title = liveRow.formTitle;
           if (liveRow.status) form.status = liveRow.status;
 
-          const pVal = (liveRow as Record<string, unknown>).isPriority !== undefined
-            ? (liveRow as Record<string, unknown>).isPriority
-            : liveRow.priority;
+          const rowObj = liveRow as unknown as Record<string, unknown>;
+          const pVal = rowObj.isPriority !== undefined ? rowObj.isPriority : liveRow.priority;
           if (pVal !== undefined && pVal !== null && pVal !== "") {
             form.priority = pVal as boolean | string | number;
             form.isPriority = pVal as boolean | string | number;
           }
 
-          const nVal = (liveRow as Record<string, unknown>).isNew !== undefined
-            ? (liveRow as Record<string, unknown>).isNew
-            : liveRow.newForm;
+          const nVal = rowObj.isNew !== undefined ? rowObj.isNew : liveRow.newForm;
           if (nVal !== undefined && nVal !== null && nVal !== "") {
             form.newForm = nVal as boolean | string;
           }
