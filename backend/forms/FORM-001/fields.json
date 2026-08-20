@@ -1,0 +1,88 @@
+[
+  {
+    "id": "state",
+    "label": "State",
+    "type": "radio",
+    "required": true,
+    "dynamicSource": {
+      "type": "location",
+      "column": "state"
+    }
+  },
+  {
+    "id": "district",
+    "label": "District",
+    "type": "select",
+    "required": true,
+    "placeholder": "Select District",
+    "dynamicSource": {
+      "type": "location",
+      "column": "district",
+      "parentField": "state"
+    }
+  },
+  {
+    "id": "block",
+    "label": "Block",
+    "type": "select",
+    "required": true,
+    "placeholder": "Select Block",
+    "dynamicSource": {
+      "type": "location",
+      "column": "block",
+      "parentField": "district"
+    }
+  },
+  {
+    "id": "school",
+    "label": "School",
+    "type": "select",
+    "required": true,
+    "placeholder": "Select School",
+    "dynamicSource": {
+      "type": "location",
+      "column": "school",
+      "parentField": "block"
+    }
+  },
+  {
+    "id": "name_of_gsl",
+    "label": "Name Of GSL",
+    "type": "text",
+    "required": true,
+    "placeholder": "Enter name of GSL"
+  },
+  {
+    "id": "mobile_nuber",
+    "label": "Mobile nuber",
+    "type": "tel",
+    "required": true,
+    "placeholder": "Enter 10-digit mobile number"
+  },
+  {
+    "id": "age",
+    "label": "Age",
+    "type": "number",
+    "required": true,
+    "placeholder": "Enter age"
+  },
+  {
+    "id": "photo_gsg",
+    "label": "Photo GSG",
+    "type": "image",
+    "required": true,
+    "accept": "image/*",
+    "placeholder": "Upload GSG Photo"
+  },
+  {
+    "id": "category",
+    "label": "Category",
+    "type": "multiselect",
+    "required": true,
+    "placeholder": "Select categories",
+    "dynamicSource": {
+      "type": "dropdown",
+      "fieldName": "Category"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "id": "FORM-001",
+  "title": "GSG Profile Test V1",
+  "description": "GSG Profile collection form.",
+  "enabled": true,
+  "status": "Active",
+  "priority": "Yes",
+  "newForm": "Yes",
+  "version": 1,
+  "createdAt": "2026-08-20T00:00:00.000Z",
+  "updatedAt": "2026-08-20T00:00:00.000Z",
+  "gasEndpoint": "",
+  "sheetId": ""
+}
